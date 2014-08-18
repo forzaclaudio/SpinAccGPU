@@ -2,10 +2,10 @@
  * david Claudio Gonzalez
  * University of Guanajuato, 2012
  * d.claudiogonzalez@gmail.com
- * File: gpuspinAccumulationEffBeta.c
- * Description: Contains the program that sets up
+ * File: gpuspinAccumulationEffBeta.c 
+ * Description: Contains the program that sets up 
  * the arguments to compute the spin accumulation
- * on a GPU
+ * on a GPU 
  */
 
 //General includes
@@ -24,14 +24,14 @@
 
 FILE *magnin, *spinin, *outlog;
 char fileinstr[255],fileoutstr[255],effvalsfileoutstr[255],logoutstr[255];
-
+ 
 //Number of cells along direction x
 int NXCUDA;
 //Number of cells along direction y
 int NYCUDA;
 //Number of cells along direction z
 int NZCUDA;
-//Global values to use for simulations
+//Global values to use for simulations 
 double u_val=u_const;
 double tau_sd_val=tau_sd_const;
 double tau_sf_val=tau_sf_const;
@@ -41,7 +41,7 @@ double tau_sf_val=tau_sf_const;
 //and shared memory is increased
 int XBLOCKS_PERGRID, YBLOCKS_PERGRID;
 
-//Declare pointers to arrays to store magnetization and spinaccumulation
+//Declare pointers to arrays to store magnetization and spinaccumulation 
 //on CPU
 double **mx,**my,**mz;
 double **u_eff, **u_eff_beta_eff, **beta_eff;	//Arrays of effective values
@@ -51,7 +51,7 @@ double *mem_buffer;
 double *beta_diff_num;
 double *beta_diff_den;
 
-//Declare pointers to arrays to store magnetization and spinaccumulation
+//Declare pointers to arrays to store magnetization and spinaccumulation 
 //on GPU as well as auxiliary arrays
 double *dev_mx, *dev_my, *dev_mz;
 double *dev_deltam_x, *dev_deltam_y, *dev_deltam_z;
@@ -209,7 +209,7 @@ __device__ void SEL4(	double A11, double A12, double A13, double A14,
 			double *DFDL, double *D2FDL2)
 {
 //Computation of the first and seconde derivatives for
-//points i = 1, NX +1, j = 2, NY - 2
+//points i = 1, NX +1, j = 2, NY - 2  
 double DET2A,DET2B,DET2C,DET2D,DET2E;
 double DET2F,DET2G,DET2H,DET2I,DET2J;
 double DET3A,DET3B,DET3C,DET3D;
@@ -269,18 +269,18 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
 	k4x[index] = dt * deltam_x[index];
 	deltam_x[index] = tempx[index] + (k1x[index] +
-				(double)2.0 * (k2x[index] + k3x[index])
+				(double)2.0 * (k2x[index] + k3x[index]) 
 				+ k4x[index]) / (double) 6.0;
 
 
 	k4y[index] = dt * deltam_y[index];
 	deltam_y[index] = tempy[index] + (k1y[index] +
-				(double)2.0 * (k2y[index] + k3y[index])
+				(double)2.0 * (k2y[index] + k3y[index]) 
 				+ k4y[index]) / (double) 6.0;
 
 	k4z[index] = dt * deltam_z[index];
 	deltam_z[index] = tempz[index] + (k1z[index] +
-				(double)2.0 * (k2z[index] + k3z[index])
+				(double)2.0 * (k2z[index] + k3z[index]) 
 				+ k4z[index]) / (double) 6.0;
 	}
 }
@@ -410,11 +410,11 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
 	//Sign of source term is changed due to double cross product
 	//used to orthogonalize
-	deltam_x[index] = sfrelax_x[index] + sdex_x[index] + lapl_x[index]
+	deltam_x[index] = sfrelax_x[index] + sdex_x[index] + lapl_x[index] 
 				- sm_x[index];
-	deltam_y[index] = sfrelax_y[index] + sdex_y[index] + lapl_y[index]
+	deltam_y[index] = sfrelax_y[index] + sdex_y[index] + lapl_y[index] 
 				- sm_y[index];
-	deltam_z[index] = sfrelax_z[index] + sdex_z[index] + lapl_z[index]
+	deltam_z[index] = sfrelax_z[index] + sdex_z[index] + lapl_z[index] 
 				- sm_z[index];
 	}
 }
@@ -472,7 +472,7 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 			- (double)5.0 * deltam_x[index] / (double)2.0
 			- deltam_x[leftneigh2] / (double)12.0 + (double)4.0 * deltam_x[leftneigh1] / (double)3.0;
 	d2adx2[index] = d2adx2[index] / (DELTAX * DELTAX);
-
+	
 	d2bdx2[index] = - deltam_y[rightneigh2] / (double)12.0 + (double)4.0 * deltam_y[rightneigh1] / (double)3.0
 			- (double)5.0 * deltam_y[index] / (double)2.0
 			- deltam_y[leftneigh2] / (double)12.0 + (double)4.0 * deltam_y[leftneigh1] / (double)3.0;
@@ -486,14 +486,14 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 
 if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
-	lapl_x[index] = (double)D * d2adx2[index];
+	lapl_x[index] = (double)D * d2adx2[index]; 
 	lapl_y[index] = (double)D * d2bdx2[index];
 	lapl_z[index] = (double)D * d2gdx2[index];
 	}
 
 }
 
-__global__ void glaplaciany(double *lapl_x, double *lapl_y, double *lapl_z,
+__global__ void glaplaciany(double *lapl_x, double *lapl_y, double *lapl_z, 
 				double *d2ady2, double *d2bdy2, double *d2gdy2,
 				double *deltam_x, double *deltam_y, double *deltam_z,
 			 	int grid_width)
@@ -528,7 +528,7 @@ if (i > 1 && i < NX+2 && j >= 2 && j < NY-2)
 			- (double)5.0 * deltam_x[index] / (double)2.0
 			- deltam_x[backneigh2] / (double)12.0 + (double)4.0 * deltam_x[backneigh1] / (double)3.0;
 	d2ady2[index] = d2ady2[index] / (DELTAY * DELTAY);
-
+	
 	d2bdy2[index] = - deltam_y[frontneigh2] / (double)12.0 + (double)4.0 * deltam_y[frontneigh1] / (double)3.0
 			- (double)5.0 * deltam_y[index] / (double)2.0
 			- deltam_y[backneigh2] / (double)12.0 + (double)4.0 * deltam_y[backneigh1] / (double)3.0;
@@ -549,7 +549,7 @@ if (i > 1 && i < NX+2 && j >= 2 && j < NY-2)
 	}
 }
 
-__global__ void glaplacianyboundaries(double *lapl_x, double *lapl_y, double *lapl_z,
+__global__ void glaplacianyboundaries(double *lapl_x, double *lapl_y, double *lapl_z, 
 				double *d2ady2, double *d2bdy2, double *d2gdy2,
 				double *deltam_x, double *deltam_y, double *deltam_z,
 			 	int grid_width)
@@ -657,7 +657,7 @@ if (i > 1 && i < NX+2 && j == 1)
       	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2ady2[index]=D2FDL2;
-
+   	
 	// d2deltam_y/dy2
 	BFCT1 = (double)0.0;
       	BFCT2 = deltam_y[backneigh1] - deltam_y[index];
@@ -679,7 +679,7 @@ if (i > 1 && i < NX+2 && j == 1)
 	d2gdy2[index]=D2FDL2;
 	}
 
-if (i > 1 && i < NX+2 && j == NY-2)
+if (i > 1 && i < NX+2 && j == NY-2)	
 	{
 	// j = Ny - 2
 	// Setup coefficients
@@ -710,7 +710,7 @@ if (i > 1 && i < NX+2 && j == NY-2)
       	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2ady2[index]=D2FDL2;
-
+   	
 	// d2deltam_y/dy2
 	BFCT1 = (double)0.0;
       	BFCT2 = deltam_y[frontneigh1] - deltam_y[index];
@@ -752,9 +752,9 @@ if (i > 1 && i < NX+2 && j == NY-1)
 
 	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
 
-	d2ady2[index] = D2FDL2;
+	d2ady2[index] = D2FDL2;	
 
-	//d2deltam_y/dy2,
+	//d2deltam_y/dy2, 
 	BFCT1 = (double)0.0;
 	BFCT2 = deltam_y[backneigh1] - deltam_y[index];
 	BFCT3 = deltam_y[backneigh2] - deltam_y[index];
@@ -763,7 +763,7 @@ if (i > 1 && i < NX+2 && j == NY-1)
 
 	d2bdy2[index] = D2FDL2;
 
-	//d2deltam_z/dy2,
+	//d2deltam_z/dy2, 
 	BFCT1 = (double)0.0;
 	BFCT2 = deltam_z[backneigh1] - deltam_z[index];
 	BFCT3 = deltam_z[backneigh2] - deltam_z[index];
@@ -833,7 +833,7 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gm_x_sm(double u, double *m_x_sm_x, double *m_x_sm_y, double *m_x_sm_z,
+__global__ void gm_x_sm(double u, double *m_x_sm_x, double *m_x_sm_y, double *m_x_sm_z, 
 			double *mx, double *my, double *mz,
 			double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
@@ -857,7 +857,7 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gm_x_source(double *tempx, double *tempy, double *tempz,
+__global__ void gm_x_source(double *tempx, double *tempy, double *tempz, 
 			double *mx, double *my, double *mz,
 			double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
@@ -894,8 +894,8 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gu_eff( double u, double tau_sd, double *u_eff,
-			double *deltam_x, double *deltam_y, double *deltam_z,
+__global__ void gu_eff( double u, double tau_sd, double *u_eff, 
+			double *deltam_x, double *deltam_y, double *deltam_z, 
 			double *m_x_sm_x, double *m_x_sm_y, double *m_x_sm_z,
 			double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
@@ -909,22 +909,22 @@ j = blockIdx.y * blockDim.y + threadIdx.y;
 index = j * grid_width + i;
 if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
-	//First we compute the norm for the current cell note that sm must be divided
+	//First we compute the norm for the current cell note that sm must be divided 
 	//by u in order to get the correct value of partial x from source
 	partial_norm = sm_x[index] * sm_x[index] + sm_y[index] * sm_y[index] + sm_z[index] * sm_z[index];
-
+	
 	partial_norm = partial_norm / (u*u);
-
-	//Compute effective u notice that tau_sd is initially given in ps
-	//so we convert to ns
-	u_eff[index] = -(1.0 / tau_sd) * (deltam_x[index] * m_x_sm_x[index]
+	
+	//Compute effective u notice that tau_sd is initially given in ps 
+	//so we convert to ns		
+	u_eff[index] = -(1.0 / tau_sd) * (deltam_x[index] * m_x_sm_x[index] 
 			+ deltam_y[index] * m_x_sm_y[index]
 			+ deltam_z[index] * m_x_sm_z[index])/partial_norm;
 	}
 }
 
-__global__ void gu_eff_beta_eff(double u, double tau_sd, double *u_eff_beta_eff,
-			double *deltam_x, double *deltam_y, double *deltam_z,
+__global__ void gu_eff_beta_eff(double u, double tau_sd, double *u_eff_beta_eff, 
+			double *deltam_x, double *deltam_y, double *deltam_z, 
 			double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
 int i, j, index;
@@ -937,12 +937,12 @@ j = blockIdx.y * blockDim.y + threadIdx.y;
 index = j * grid_width + i;
 if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
-	//First we compute the norm for the current cell note that sm must be divided
+	//First we compute the norm for the current cell note that sm must be divided 
 	//by u in order to get the correct value of partial x from source
 	partial_norm = sm_x[index] * sm_x[index] + sm_y[index] * sm_y[index] + sm_z[index] * sm_z[index];
-
+	
 	partial_norm = partial_norm / (u*u);
-
+	
 	//Compute effective u times effective beta, notice that tau_sd
 	//is initially given in ps
 	u_eff_beta_eff[index] = -(1.0 / tau_sd) * (deltam_x[index] * sm_x[index]/u
@@ -989,10 +989,10 @@ index = j * grid_width + i;
 cacheIndex = threadIdx.y * blockDim.x + threadIdx.x;
 if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
-	//First we compute the norm for the current cell note that sm must be divided
+	//First we compute the norm for the current cell note that sm must be divided 
 	//by u in order to get the correct value of partial x from source
 	partial_norm = sm_x[index] * sm_x[index] + sm_y[index] * sm_y[index] + sm_z[index] * sm_z[index];
-
+	
 	partial_norm = partial_norm / (u*u);
 
 	//every thread copies its value to the cache
@@ -1027,12 +1027,12 @@ for (j = 0; j < NY; j++)
 	}
 printf("Initial and final coordinates read are:\n%20.15f,%20.15f\n%20.15f,%20.15f\n",
         XCOORD[0][0],YCOORD[0][0],XCOORD[NX-1][NY-1],YCOORD[NX-1][NY-1]);
-//Read data
+//Read data 
 for (j = 0; j < NY ; j++)
 	for (i = 0 ; i < NX ; i++)
 	{
 	i0 = i + 2;
-	fscanf(in,"%lf %lf %lf",&mx[i0][j],&my[i0][j],&mz[i0][j]);
+	fscanf(in,"%lf %lf %lf",&mx[i0][j],&my[i0][j],&mz[i0][j]); 
 	}
 printf("Magnetization read: \n%20.15f %20.15f %20.15f\n%20.15f %20.15f %20.15f\n",
 	mx[2][0],my[2][0],mz[2][0],mx[NX+1][NY-1],my[NX+1][NY-1],mz[NX+1][NY-1]);
@@ -1065,12 +1065,12 @@ int i,j,i0;
 fscanf(in,"%i",&NXNY); //Number of points
 printf("The number of points to read are: %i\n",NXNY);
 
-//Read data
+//Read data 
 for (j = 0; j < NY ; j++)
 	for (i = 0 ; i < NX ; i++)
 	{
 	i0 = i + 2;
-	fscanf(in,"%lf %lf %lf",&deltam_x[i0][j],&deltam_y[i0][j],&deltam_z[i0][j]);
+	fscanf(in,"%lf %lf %lf",&deltam_x[i0][j],&deltam_y[i0][j],&deltam_z[i0][j]); 
 	}
 printf("Spin accumulation read: \n%20.15f %20.15f %20.15f\n%20.15f %20.15f %20.15f\n",
 	deltam_x[2][0],deltam_y[2][0],deltam_z[2][0],deltam_x[NX+1][NY-1],deltam_y[NX+1][NY-1],deltam_z[NX+1][NY-1]);
@@ -1095,35 +1095,35 @@ for (j = 0; j < NY; j++)
 }
 
 
-void save_spinaccumulation_data(FILE *out)
+void save_spinaccumulation_data(FILE *out)  
 {
 int i,j,i0;
 fprintf(out,"%i\n",NX*NY);
-//Save spin accumulation data
+//Save spin accumulation data 
 for (j = 0; j < NY; j++)
 	for (i = 0 ; i < NX ; i++)
 	{
 	i0 = i + 2;
-	fprintf(out,"%20.15f%20.15f%20.15f\n",deltam_x[i0][j],deltam_y[i0][j],deltam_z[i0][j]); //Write
+	fprintf(out,"%20.15f%20.15f%20.15f\n",deltam_x[i0][j],deltam_y[i0][j],deltam_z[i0][j]); //Write 
 	}
 printf("File: %s written succesfully!\n",fileoutstr);
-}
+} 
 
-void save_effectivevalues_data(FILE *out)
+void save_effectivevalues_data(FILE *out)  
 {
 int i,j,i0;
 
 fprintf(out,"%i\n",NX*NY);
-//Save spin accumulation data
+//Save spin accumulation data 
 for (j = 0; j < NY; j++)
 	for (i = 0 ; i < NX ; i++)
 	{
 	i0 = i + 2;
-	fprintf(out,"%20.15f%20.15f%20.15f\n",u_eff[i0][j],u_eff_beta_eff[i0][j],beta_eff[i0][j]); //Write
+	fprintf(out,"%20.15f%20.15f%20.15f\n",u_eff[i0][j],u_eff_beta_eff[i0][j],beta_eff[i0][j]); //Write 
 	}
 
 printf("File: %s written succesfully!\n",effvalsfileoutstr);
-}
+} 
 
 void flatten_array(double **array2D,int cols, int rows)
 //This function maps a 2D array into a temporary 1D array
@@ -1164,10 +1164,10 @@ else
 //printf("NZCUDA = %i\n",NZCUDA);
 
 //Setup optimum number of blocks
-XBLOCKS_PERGRID = (int)ceil((float)NX/(float)XTHREADS_PERBLOCK);
+XBLOCKS_PERGRID = (int)ceil((float)NX/(float)XTHREADS_PERBLOCK); 
 printf("XBLOCKS_PERGRID = %i\n",XBLOCKS_PERGRID);
 
-YBLOCKS_PERGRID = (int)ceil((float)NY/(float)YTHREADS_PERBLOCK);
+YBLOCKS_PERGRID = (int)ceil((float)NY/(float)YTHREADS_PERBLOCK); 
 printf("YBLOCKS_PERGRID = %i\n",YBLOCKS_PERGRID);
 
 //Allocation of arrays
@@ -1242,12 +1242,12 @@ beta_diff_den = (double *)calloc( NXCUDA * NYCUDA ,sizeof(double));
 printf(".\tDone!\n");
 
 //Read magnetization
-if ((magnin = fopen(filein,"r")) != NULL )
+if ((magnin = fopen(filein,"r")) != NULL ) 
 	{
 	read_magnetization_data(magnin);	//Open file containing magnetization
 	fclose(magnin); //Close input file
 	}
-else
+else 
 	{
 	printf("Error: File %s doesn't exists!\n",filein);
 	exit(1);
@@ -1255,12 +1255,12 @@ else
 //Read spinccumulation if required
 if (readspinaccumulation == 1)
 	{
-	if ((spinin = fopen(spinfilein,"r")) != NULL )
+	if ((spinin = fopen(spinfilein,"r")) != NULL ) 
 		{
 		read_spinaccumulation_data(spinin);	//Open file containing spinaccumulation
 		fclose(spinin); //Close input file
 		}
-	else
+	else 
 		{
 		printf("Error: File %s doesn't exists!\n",spinin);
 		exit(1);
@@ -1422,7 +1422,7 @@ if(readspinaccumulation == 1)
 	flatten_array(deltam_z,NXCUDA,NYCUDA);
 	HANDLE_ERROR( cudaMemcpy(dev_deltam_z,mem_buffer,size_bytes,cudaMemcpyHostToDevice) );
 	}
-else
+else 
 	{
 	HANDLE_ERROR( cudaMemset(dev_deltam_x,0,size_bytes) );
 	HANDLE_ERROR( cudaMemset(dev_deltam_y,0,size_bytes) );
@@ -1592,7 +1592,7 @@ void effective_values(void)
 dim3 blocks(XBLOCKS_PERGRID,YBLOCKS_PERGRID);
 dim3 threads(XTHREADS_PERBLOCK,YTHREADS_PERBLOCK);
 
-//A further division of work is carried out
+//A further division of work is carried out 
 //when using 1024 threads is not possible because shared data requirements
 //are higher than 16 kB per kernel
 dim3 blocks2(XBLOCKS_PERGRID*2,YBLOCKS_PERGRID*2);
@@ -1602,22 +1602,22 @@ int i,i0,j,index;
 double num = 0.0, den = 0.0;
 
 gm_x_sm<<<blocks,threads>>>(u_val,dev_m_x_sm_x, dev_m_x_sm_y, dev_m_x_sm_z,
-				dev_mx, dev_my, dev_mz,
+				dev_mx, dev_my, dev_mz, 
 				dev_sm_x, dev_sm_y, dev_sm_z, NXCUDA);
 
-gu_eff<<<blocks,threads>>>(u_val,tau_sd_val,dev_u_eff,
-			dev_deltam_x, dev_deltam_y, dev_deltam_z,
+gu_eff<<<blocks,threads>>>(u_val,tau_sd_val,dev_u_eff, 
+			dev_deltam_x, dev_deltam_y, dev_deltam_z, 
 			dev_m_x_sm_x, dev_m_x_sm_y, dev_m_x_sm_z,
 			dev_sm_x, dev_sm_y, dev_sm_z, NXCUDA);
 
-gu_eff_beta_eff<<<blocks,threads>>>(u_val,tau_sd_val,dev_u_eff_beta_eff,
-			dev_deltam_x, dev_deltam_y, dev_deltam_z,
+gu_eff_beta_eff<<<blocks,threads>>>(u_val,tau_sd_val,dev_u_eff_beta_eff, 
+			dev_deltam_x, dev_deltam_y, dev_deltam_z, 
 			dev_sm_x, dev_sm_y, dev_sm_z, NXCUDA);
 
 gbeta_eff<<<blocks,threads>>>(dev_beta_eff, dev_u_eff, dev_u_eff_beta_eff, NXCUDA);
 
 //Notice that an alternative size of blocks and threads is used
-gbeta_diff<<<blocks2,threads2>>>(u_val,dev_beta_diff_num, dev_beta_diff_den,
+gbeta_diff<<<blocks2,threads2>>>(u_val,dev_beta_diff_num, dev_beta_diff_den, 
 				dev_beta_eff, dev_sm_x, dev_sm_y, dev_sm_z, NXCUDA);
 
 HANDLE_ERROR( cudaMemcpy(beta_diff_num, dev_beta_diff_num, size_bytes, cudaMemcpyDeviceToHost) );
@@ -1627,12 +1627,12 @@ for(j = 0; j < NY; j++)
 	{
 	i0 = i + 2;
 	index = j * NXCUDA + i0;
-	num += beta_diff_num[index];
-	den += beta_diff_den[index];
+	num += beta_diff_num[index];	
+	den += beta_diff_den[index];	
 	}
 beta_diff = num / den;
-printf("Diffusive beta: %20.15e\n", beta_diff);
-fprintf(outlog,"Diffusive beta: %20.15e\n", beta_diff);
+//printf("Diffusive beta: %20.15e\n", beta_diff);
+//fprintf(outlog,"Diffusive beta: %20.15e\n", beta_diff);
 
 HANDLE_ERROR( cudaMemcpy(mem_buffer,dev_u_eff,size_bytes,cudaMemcpyDeviceToHost) );
 unflatten_array(u_eff,NXCUDA,NYCUDA);
@@ -1653,7 +1653,7 @@ void initial_calculations(void)
 dim3 blocks(XBLOCKS_PERGRID,YBLOCKS_PERGRID);
 dim3 threads(XTHREADS_PERBLOCK,YTHREADS_PERBLOCK);
 
-//A further division of work is carried out
+//A further division of work is carried out 
 //when using 1024 threads is not possible because shared data requirements
 //are higher than 16 kB per kernel
 dim3 blocks2(XBLOCKS_PERGRID*2,YBLOCKS_PERGRID*2);
@@ -1671,11 +1671,11 @@ gsource<<<blocks,threads>>>(u_val,dev_sm_z, dev_mz, NXCUDA);
 //Project source term on magnetization components by computing
 //a cross product twice
 gm_x_source<<<blocks,threads>>>(dev_tempx, dev_tempy, dev_tempz,
-				dev_mx, dev_my, dev_mz,
+				dev_mx, dev_my, dev_mz, 
 				dev_sm_x, dev_sm_y, dev_sm_z, NXCUDA);
 
 gm_x_source<<<blocks,threads>>>(dev_tempx, dev_tempy, dev_tempz,
-				dev_mx, dev_my, dev_mz,
+				dev_mx, dev_my, dev_mz, 
 				dev_sm_x, dev_sm_y, dev_sm_z, NXCUDA);
 
 }
@@ -1689,7 +1689,7 @@ void rk4_integ(void)
 dim3 blocks(XBLOCKS_PERGRID,YBLOCKS_PERGRID);
 dim3 threads(XTHREADS_PERBLOCK,YTHREADS_PERBLOCK);
 
-//A further division of work is carried out
+//A further division of work is carried out 
 //when using 1024 threads is not possible because shared data requirements
 //are higher than 16 kB per kernel
 dim3 blocks2(XBLOCKS_PERGRID*2,YBLOCKS_PERGRID*2);
@@ -1700,7 +1700,7 @@ gspinaccum_backup<<<blocks,threads>>>(dev_deltam_x, dev_deltam_y, dev_deltam_z,
                                 NXCUDA);
 
 //This call computes all the required terms to compute a solution
-gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z,
+gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z, 
 		dev_deltam_x, dev_deltam_y, dev_deltam_z,
 		NXCUDA);
 
@@ -1723,7 +1723,7 @@ glaplaciany<<<blocks2,threads2>>>(dev_lapl_x, dev_lapl_y, dev_lapl_z,
 				dev_deltam_x, dev_deltam_y, dev_deltam_z,
 			 	NXCUDA);
 
-//This call evaluates dm / dt at t = n
+//This call evaluates dm / dt at t = n 
 gsolution<<<blocks,threads>>>(dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z,
 		dev_sm_x, dev_sm_y, dev_sm_z,
 		dev_sdex_x, dev_sdex_y, dev_sdex_z,
@@ -1738,7 +1738,7 @@ gterm1_RK4<<<blocks,threads>>>(dev_deltam_x, dev_deltam_y, dev_deltam_z,
                                 NXCUDA);
 
 //This call computes all the required terms to compute a solution
-gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z,
+gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z, 
 		dev_deltam_x, dev_deltam_y, dev_deltam_z,
 		NXCUDA);
 
@@ -1777,7 +1777,7 @@ gterm2_RK4<<<blocks,threads>>>(dev_deltam_x, dev_deltam_y, dev_deltam_z,
                                 NXCUDA);
 
 //This call computes all the required terms to compute a solution
-gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z,
+gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z, 
 		dev_deltam_x, dev_deltam_y, dev_deltam_z,
 		NXCUDA);
 
@@ -1816,7 +1816,7 @@ gterm3_RK4<<<blocks,threads>>>(dev_deltam_x, dev_deltam_y, dev_deltam_z,
                                 NXCUDA);
 
 //This call computes all the required terms to compute a solution
-gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z,
+gsf_relaxation<<<blocks,threads>>>(tau_sf_val,dev_sfrelax_x, dev_sfrelax_y, dev_sfrelax_z, 
 		dev_deltam_x, dev_deltam_y, dev_deltam_z,
 		NXCUDA);
 
@@ -1864,9 +1864,12 @@ int main (int argc, char *argv[])
 {
 int iteration = 0;
 int iwrite = 0;
+int icheck = 0;
+int converged = 0;
 double sim_time = 0.0;
 float elapsedTime;
 FILE *out;
+double beta_diff_old=0.0,beta_diff_new=0.0;
 
 cudaEvent_t start,stop;
 HANDLE_ERROR( cudaEventCreate( &start));
@@ -1889,20 +1892,32 @@ do
 
 	//If saving is enabled increase iteration in 1
 	iwrite += writeflag;
-
+	//Check for convergenc is done at a diferent factor of saved values
+	icheck += 1;
 	//Compute time in ns
 	sim_time = (double)dt * (double)iteration;
 	rk4_integ();
+	if (icheck == 50 * Nwrite )
+		{
+		effective_values();
+		beta_diff_old = beta_diff_new;
+		beta_diff_new = beta_diff;
+		if(fabs(beta_diff_new-beta_diff_old) < max_diff)
+			{
+			converged = 1;
+			}
+		icheck = 0;
+		}
+		
 	if (iwrite == Nwrite)
 		{
-		printf("%20.15f\n",sim_time);
-		fprintf(outlog,"%20.15f\n",sim_time);
-
-		//Reset iwrite counte
+		printf("%20.15f %20.15f\n",sim_time,beta_diff);
+		fprintf(outlog,"%20.15f %20.15f\n",sim_time,beta_diff);
+		//Reset iwrite counter
 		iwrite = 0;
-		}
+		} 
 	}
-while(tmax > sim_time);
+while(tmax > sim_time && !converged);
 
 HANDLE_ERROR( cudaEventRecord(stop));
 HANDLE_ERROR( cudaEventSynchronize(stop));
@@ -1919,14 +1934,16 @@ HANDLE_ERROR( cudaEventDestroy(stop));
 update_CPUspinaccumulation();
 
 effective_values();
+printf("Diffusive beta: %20.15e\n", beta_diff);
+fprintf(outlog,"Diffusive beta: %20.15e\n", beta_diff);
 //Save effective values
 
-if ((out = fopen(effvalsfileoutstr,"w")) != NULL )
+if ((out = fopen(effvalsfileoutstr,"w")) != NULL ) 
 	{
 	save_effectivevalues_data(out);
 	fclose(out); //Close input file
 	}
-else
+else 
 	{
 	printf("Error: File %s doesn't exists!\n",effvalsfileoutstr);
 	exit(1);
