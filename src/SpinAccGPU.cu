@@ -1,13 +1,12 @@
 /*
- * david Claudio Gonzalez
- * University of Guanajuato, 2012
+ * David Claudio Gonzalez
+ * Copyright (C) 2012-2016
  * d.claudiogonzalez@gmail.com
  * File: gpuspinAccumulationEffBeta.c 
  * Description: Contains the program that sets up 
  * the arguments to compute the spin accumulation
  * on a GPU 
  */
-
 //General includes
 #include <stdio.h>
 #include <stdlib.h>
@@ -367,10 +366,9 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gspinaccum_backup(double *deltam_x, double *deltam_y, double *deltam_z,
-				double *tempx, double *tempy, double *tempz,
+__global__ void gspinaccum_backup(double *deltam_x, double *deltam_y, 
+                double *deltam_z, double *tempx, double *tempy, double *tempz,
 			 	int grid_width)
-
 //Computation of sf_relaxation term using global memory
 {
 int i,j,index;
@@ -390,8 +388,8 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gsolution(double *sfrelax_x, double *sfrelax_y, double *sfrelax_z,
-				double *sm_x, double *sm_y, double *sm_z,
+__global__ void gsolution(double *sfrelax_x, double *sfrelax_y, 
+                double *sfrelax_z, double *sm_x, double *sm_y, double *sm_z,
 				double *sdex_x, double *sdex_y, double *sdex_z,
 				double *lapl_x, double *lapl_y, double *lapl_z,
 				double *deltam_x, double *deltam_y, double *deltam_z,
@@ -419,9 +417,9 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gsf_relaxation(double tau_sf,double *sfrelax_x, double *sfrelax_y, double *sfrelax_z,
-				double *deltam_x, double *deltam_y, double *deltam_z,
-			 	int grid_width)
+__global__ void gsf_relaxation(double tau_sf,double *sfrelax_x, 
+                double *sfrelax_y, double *sfrelax_z, double *deltam_x, 
+                double *deltam_y, double *deltam_z, int grid_width)
 //Computation of sf_relaxation term using global memory
 {
 int i,j,index;
@@ -468,19 +466,25 @@ rightneigh2 = j * grid_width + (i+2);
 DELTAX = (double)TX/(double)NX;
 if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	{
-	d2adx2[index] = - deltam_x[rightneigh2] / (double)12.0 + (double)4.0 * deltam_x[rightneigh1] / (double)3.0
-			- (double)5.0 * deltam_x[index] / (double)2.0
-			- deltam_x[leftneigh2] / (double)12.0 + (double)4.0 * deltam_x[leftneigh1] / (double)3.0;
+	d2adx2[index] = - deltam_x[rightneigh2] / (double)12.0 + (double)4.0 * 
+	                deltam_x[rightneigh1] / (double)3.0 - (double)5.0 * 
+	                deltam_x[index] / (double)2.0 - deltam_x[leftneigh2] / 
+	                (double)12.0 + (double)4.0 * deltam_x[leftneigh1] / 
+	                (double)3.0;
 	d2adx2[index] = d2adx2[index] / (DELTAX * DELTAX);
 	
-	d2bdx2[index] = - deltam_y[rightneigh2] / (double)12.0 + (double)4.0 * deltam_y[rightneigh1] / (double)3.0
-			- (double)5.0 * deltam_y[index] / (double)2.0
-			- deltam_y[leftneigh2] / (double)12.0 + (double)4.0 * deltam_y[leftneigh1] / (double)3.0;
+	d2bdx2[index] = - deltam_y[rightneigh2] / (double)12.0 + (double)4.0 * 
+	                deltam_y[rightneigh1] / (double)3.0 - (double)5.0 * 
+	                deltam_y[index] / (double)2.0 - deltam_y[leftneigh2] / 
+	                (double)12.0 + (double)4.0 * deltam_y[leftneigh1] / 
+	                (double)3.0;
 	d2bdx2[index] = d2bdx2[index] / (DELTAX * DELTAX);
 
-	d2gdx2[index] = - deltam_z[rightneigh2] / (double)12.0 + (double)4.0 * deltam_z[rightneigh1] / (double)3.0
-			- (double)5.0 * deltam_z[index] / (double)2.0
-			- deltam_z[leftneigh2] / (double)12.0 + (double)4.0 * deltam_z[leftneigh1] / (double)3.0;
+	d2gdx2[index] = - deltam_z[rightneigh2] / (double)12.0 + (double)4.0 * 
+	                deltam_z[rightneigh1] / (double)3.0 - (double)5.0 * 
+	                deltam_z[index] / (double)2.0 - deltam_z[leftneigh2] / 
+	                (double)12.0 + (double)4.0 * deltam_z[leftneigh1] / 
+	                (double)3.0;
 	d2gdx2[index] = d2gdx2[index] / (DELTAX * DELTAX);
 	}
 
@@ -524,21 +528,26 @@ DELTAY = (double)TY/(double)NY;
 
 if (i > 1 && i < NX+2 && j >= 2 && j < NY-2)
 	{
-	d2ady2[index] = - deltam_x[frontneigh2] / (double)12.0 + (double)4.0 * deltam_x[frontneigh1] / (double)3.0
-			- (double)5.0 * deltam_x[index] / (double)2.0
-			- deltam_x[backneigh2] / (double)12.0 + (double)4.0 * deltam_x[backneigh1] / (double)3.0;
+	d2ady2[index] = - deltam_x[frontneigh2] / (double)12.0 + (double)4.0 * 
+	                deltam_x[frontneigh1] / (double)3.0 - (double)5.0 * 
+	                deltam_x[index] / (double)2.0 - deltam_x[backneigh2] / 
+	                (double)12.0 + (double)4.0 * deltam_x[backneigh1] / 
+	                (double)3.0;
 	d2ady2[index] = d2ady2[index] / (DELTAY * DELTAY);
 	
-	d2bdy2[index] = - deltam_y[frontneigh2] / (double)12.0 + (double)4.0 * deltam_y[frontneigh1] / (double)3.0
-			- (double)5.0 * deltam_y[index] / (double)2.0
-			- deltam_y[backneigh2] / (double)12.0 + (double)4.0 * deltam_y[backneigh1] / (double)3.0;
+	d2bdy2[index] = - deltam_y[frontneigh2] / (double)12.0 + (double)4.0 * 
+	                deltam_y[frontneigh1] / (double)3.0 - (double)5.0 * 
+	                deltam_y[index] / (double)2.0  - deltam_y[backneigh2] / 
+	               (double)12.0 + (double)4.0 * deltam_y[backneigh1] / 
+	               (double)3.0;
 	d2bdy2[index] = d2bdy2[index] / (DELTAY * DELTAY);
 
-	d2gdy2[index] = - deltam_z[frontneigh2] / (double)12.0 + (double)4.0 * deltam_z[frontneigh1] / (double)3.0
-			- (double)5.0 * deltam_z[index] / (double)2.0
-			- deltam_z[backneigh2] / (double)12.0 + (double)4.0 * deltam_z[backneigh1] / (double)3.0;
+	d2gdy2[index] = - deltam_z[frontneigh2] / (double)12.0 + (double)4.0 * 
+	                deltam_z[frontneigh1] / (double)3.0 - (double)5.0 * 
+	                deltam_z[index] / (double)2.0 - deltam_z[backneigh2] / 
+	                (double)12.0 + (double)4.0 * deltam_z[backneigh1] / 
+	                (double)3.0;
 	d2gdy2[index] = d2gdy2[index] / (DELTAY * DELTAY);
-
 }
 if (i > 1 && i < NX+2 && j >= 2 && j < NY-2)
 	{
@@ -549,8 +558,8 @@ if (i > 1 && i < NX+2 && j >= 2 && j < NY-2)
 	}
 }
 
-__global__ void glaplacianyboundaries(double *lapl_x, double *lapl_y, double *lapl_z, 
-				double *d2ady2, double *d2bdy2, double *d2gdy2,
+__global__ void glaplacianyboundaries(double *lapl_x, double *lapl_y, 
+                double *lapl_z, double *d2ady2, double *d2bdy2, double *d2gdy2,
 				double *deltam_x, double *deltam_y, double *deltam_z,
 			 	int grid_width)
 //Computation of laplacian term using global memory
@@ -604,7 +613,8 @@ if (i > 1 && i < NX+2 && j == 0)
 	BFCT2 = deltam_x[frontneigh1] - deltam_x[index];
 	BFCT3 = (double)0.0;
 
-	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
+	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,
+	     &D3FDL3);
 
 	d2ady2[index] = D2FDL2;
 
@@ -613,7 +623,8 @@ if (i > 1 && i < NX+2 && j == 0)
 	BFCT2 = deltam_y[frontneigh1] - deltam_y[index];
 	BFCT3 = (double)0.0;
 
-	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
+	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,
+	     &D3FDL3);
 
 	d2bdy2[index] = D2FDL2;
 
@@ -622,7 +633,8 @@ if (i > 1 && i < NX+2 && j == 0)
 	BFCT2 = deltam_z[frontneigh1] - deltam_z[index];
 	BFCT3 = (double)0.0;
 
-	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
+	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,
+	     &D3FDL3);
 
 	d2gdy2[index] = D2FDL2;
 	}
@@ -654,7 +666,8 @@ if (i > 1 && i < NX+2 && j == 1)
       	BFCT3 = deltam_x[frontneigh1] - deltam_x[index];
      	BFCT4 = deltam_x[frontneigh2] - deltam_x[index];
 
-      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
+      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, 
+      	     BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2ady2[index]=D2FDL2;
    	
@@ -664,7 +677,8 @@ if (i > 1 && i < NX+2 && j == 1)
       	BFCT3 = deltam_y[frontneigh1] - deltam_y[index];
      	BFCT4 = deltam_y[frontneigh2] - deltam_y[index];
 
-      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
+      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, 
+      	     BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2bdy2[index]=D2FDL2;
 
@@ -674,7 +688,8 @@ if (i > 1 && i < NX+2 && j == 1)
       	BFCT3 = deltam_z[frontneigh1] - deltam_z[index];
      	BFCT4 = deltam_z[frontneigh2] - deltam_z[index];
 
-      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
+      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, 
+      	     BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2gdy2[index]=D2FDL2;
 	}
@@ -707,7 +722,8 @@ if (i > 1 && i < NX+2 && j == NY-2)
       	BFCT3 = deltam_x[backneigh1] - deltam_x[index];
      	BFCT4 = deltam_x[backneigh2] - deltam_x[index];
 
-      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
+      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, 
+      	     BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2ady2[index]=D2FDL2;
    	
@@ -717,7 +733,8 @@ if (i > 1 && i < NX+2 && j == NY-2)
       	BFCT3 = deltam_y[backneigh1] - deltam_y[index];
      	BFCT4 = deltam_y[backneigh2] - deltam_y[index];
 
-      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
+      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, 
+      	     BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2bdy2[index]=D2FDL2;
 
@@ -727,7 +744,8 @@ if (i > 1 && i < NX+2 && j == NY-2)
       	BFCT3 = deltam_z[backneigh1] - deltam_z[index];
      	BFCT4 = deltam_z[backneigh2] - deltam_z[index];
 
-      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
+      	SEL4(A11,A12,A13,A14,A21,A22,A23,A24,A31,A32,A33,A34,A41,A42,A43,A44, 
+      	     BFCT1,BFCT2,BFCT3,BFCT4, &DFDL,&D2FDL2);
 
 	d2gdy2[index]=D2FDL2;
 	}
@@ -750,7 +768,8 @@ if (i > 1 && i < NX+2 && j == NY-1)
 	BFCT2 = deltam_x[backneigh1] - deltam_x[index];
 	BFCT3 = deltam_x[backneigh2] - deltam_x[index];
 
-	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
+	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,
+	     &D3FDL3);
 
 	d2ady2[index] = D2FDL2;	
 
@@ -759,7 +778,8 @@ if (i > 1 && i < NX+2 && j == NY-1)
 	BFCT2 = deltam_y[backneigh1] - deltam_y[index];
 	BFCT3 = deltam_y[backneigh2] - deltam_y[index];
 
-	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
+	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,
+	     &D3FDL3);
 
 	d2bdy2[index] = D2FDL2;
 
@@ -768,7 +788,8 @@ if (i > 1 && i < NX+2 && j == NY-1)
 	BFCT2 = deltam_z[backneigh1] - deltam_z[index];
 	BFCT3 = deltam_z[backneigh2] - deltam_z[index];
 
-	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,&D3FDL3);
+	SEL3(A11,A12,A13,A21,A22,A23,A31,A32,A33,BFCT1,BFCT2,BFCT3,&DFDL,&D2FDL2,
+	     &D3FDL3);
 
 	d2gdy2[index] = D2FDL2;
 	}
@@ -791,9 +812,9 @@ if (i > 1 && i < NX+2 && j >= NY-2 && j <= NY-1)
 
 }
 
-__global__ void gsd_exchange(double tau_sd,double *sdex_x, double *sdex_y, double *sdex_z,
-				double *deltam_x, double *deltam_y, double *deltam_z,
-				double *mx, double *my, double *mz,
+__global__ void gsd_exchange(double tau_sd,double *sdex_x, double *sdex_y, 
+                double *sdex_z, double *deltam_x, double *deltam_y, 
+                double *deltam_z, double *mx, double *my, double *mz,
 			 	int grid_width)
 //Computation of sd_term using global memory
 {
@@ -833,9 +854,9 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gm_x_sm(double u, double *m_x_sm_x, double *m_x_sm_y, double *m_x_sm_z, 
-			double *mx, double *my, double *mz,
-			double *sm_x, double *sm_y, double *sm_z, int grid_width)
+__global__ void gm_x_sm(double u, double *m_x_sm_x, double *m_x_sm_y, 
+                double *m_x_sm_z, double *mx, double *my, double *mz,
+			    double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
 int i,j,index;
 //The last increment of two is due to the shifting of
@@ -858,8 +879,8 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 }
 
 __global__ void gm_x_source(double *tempx, double *tempy, double *tempz, 
-			double *mx, double *my, double *mz,
-			double *sm_x, double *sm_y, double *sm_z, int grid_width)
+			    double *mx, double *my, double *mz,
+			    double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
 int i,j,index;
 //The last increment of two is due to the shifting of
@@ -895,9 +916,9 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 }
 
 __global__ void gu_eff( double u, double tau_sd, double *u_eff, 
-			double *deltam_x, double *deltam_y, double *deltam_z, 
-			double *m_x_sm_x, double *m_x_sm_y, double *m_x_sm_z,
-			double *sm_x, double *sm_y, double *sm_z, int grid_width)
+			    double *deltam_x, double *deltam_y, double *deltam_z, 
+			    double *m_x_sm_x, double *m_x_sm_y, double *m_x_sm_z,
+			    double *sm_x, double *sm_y, double *sm_z, int grid_width)
 {
 int i, j, index;
 double partial_norm;
@@ -951,7 +972,8 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gbeta_eff(double *beta_eff, double *u_eff, double *u_eff_beta_eff, int grid_width)
+__global__ void gbeta_eff(double *beta_eff, double *u_eff, 
+                double *u_eff_beta_eff, int grid_width)
 {
 int i, j, index;
 
@@ -969,8 +991,9 @@ if (i > 1 && i < NX+2 && j >= 0 && j < NY)
 	}
 }
 
-__global__ void gbeta_diff(double u, double *beta_diff_num, double *beta_diff_den, double *beta_eff,
-				double *sm_x, double *sm_y, double *sm_z, int grid_width)
+__global__ void gbeta_diff(double u, double *beta_diff_num, 
+                double *beta_diff_den, double *beta_eff, double *sm_x, 
+                double *sm_y, double *sm_z, int grid_width)
 //This kernel computes the numerators and denominators in order to obtain the
 //beta_diff value
 {
@@ -1073,7 +1096,8 @@ for (j = 0; j < NY ; j++)
 	fscanf(in,"%lf %lf %lf",&deltam_x[i0][j],&deltam_y[i0][j],&deltam_z[i0][j]); 
 	}
 printf("Spin accumulation read: \n%20.15f %20.15f %20.15f\n%20.15f %20.15f %20.15f\n",
-	deltam_x[2][0],deltam_y[2][0],deltam_z[2][0],deltam_x[NX+1][NY-1],deltam_y[NX+1][NY-1],deltam_z[NX+1][NY-1]);
+	deltam_x[2][0],deltam_y[2][0],deltam_z[2][0],deltam_x[NX+1][NY-1],
+	deltam_y[NX+1][NY-1],deltam_z[NX+1][NY-1]);
 for (j = 0; j < NY; j++)
 	{
 	//Replicate values at the two left boundary cells
@@ -1104,7 +1128,8 @@ for (j = 0; j < NY; j++)
 	for (i = 0 ; i < NX ; i++)
 	{
 	i0 = i + 2;
-	fprintf(out,"%20.15f%20.15f%20.15f\n",deltam_x[i0][j],deltam_y[i0][j],deltam_z[i0][j]); //Write 
+	fprintf(out,"%20.15f%20.15f%20.15f\n",deltam_x[i0][j],deltam_y[i0][j],
+	deltam_z[i0][j]); //Write 
 	}
 printf("File: %s written succesfully!\n",fileoutstr);
 } 
@@ -1119,7 +1144,8 @@ for (j = 0; j < NY; j++)
 	for (i = 0 ; i < NX ; i++)
 	{
 	i0 = i + 2;
-	fprintf(out,"%20.15f%20.15f%20.15f\n",u_eff[i0][j],u_eff_beta_eff[i0][j],beta_eff[i0][j]); //Write 
+	fprintf(out,"%20.15f%20.15f%20.15f\n",u_eff[i0][j],u_eff_beta_eff[i0][j],
+	beta_eff[i0][j]); //Write 
 	}
 
 printf("File: %s written succesfully!\n",effvalsfileoutstr);

@@ -14,7 +14,7 @@
 #define readspinaccumulation 0
 
 //Name of file where magnetization is read from 
-#define filein "upVW-magn-2.5nm.dat"	
+#define filein "ATW-magn-2.5nm.dat"	
 
 //Name of file where spinaccumulation is going to be saved
 #define fileout "-spin.dat"	
@@ -25,7 +25,7 @@
 
 //Name of file containing spin accumulation data for
 //calculation of effective values
-#define spinfilein "upVW-magn-2.5nm-spin.dat"
+#define spinfilein "ATW-magn-2.5nm-spin.dat"
 
 //Name of log file
 #define logout "-log.txt"
@@ -54,10 +54,10 @@
 //Runge Kutta 4th order integration parameters
 #define dt		25.0e-6	//Time step in nanoseconds
 #define tmax		1.0  //Integration time in nanoseconds
-#define max_diff	1.0e-8  //Convergence criterium if betta_diff diference is less that this value simulation stops
+#define max_diff	1.0e-9  //Convergence criterium if betta_diff diference is less that this value simulation stops
 #define Nsave		1000	//Iterations between save points
 #define saveflag	1	//Indicates whether save is enabled (saveflag=1) or not(saveflag=0)
-#define Nwrite		100	//Iteration between writing points (to screen and log file)
+#define Nwrite		1000	//Iteration between writing points (to screen and log file)
 #define writeflag	1	//Indicates whether save is enabled (saveflag=1) or not(saveflag=0)
 
 //Threads and array sizes parameteres

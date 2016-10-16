@@ -3,7 +3,9 @@ CUDA_PATH ?= /usr/local/cuda-6.0
 NVCC := $(CUDA_PATH)/bin/nvcc
 INCLUDES := -I./include
 
-all: SpinAccGPU
+.PHONY: clean enableATW enableVW useATWparameters useVWparameters
+
+all: clean SpinAccGPU
 
 clean: 
 	rm -rf ./bin
@@ -18,14 +20,23 @@ debug:
 	mkdir ./bin
 	$(NVCC) ./src/SpinAccGPU.cu -g ./bin/SpinAccGPU $(INCLUDES) -arch=sm_20
 
-testATW:
+useATWparameters:
+	cp ./data/ATW-parameters.h ./include/parameters.h
+
+useVWparameters:
+	cp ./data/VW-parameters.h ./include/parameters.h
+
+enableATW:
 	mkdir ./tests
-	cp ./data/ATWpm-magn-2.5nm.dat.gz ./tests
-	gunzip ./tests/ATWpm-magn-2.5nm.dat.gz
+	cp ./data/ATWpm-magn-2.5nm.dat ./tests
 	cp ./bin/SpinAccGPU ./tests
 
-testVW:
+enableVW:
 	mkdir ./tests
-	cp ./data/upVW-magn-2.5nm.dat.gz ./tests
-	gunzip ./tests/upVW-magn-2.5nm.dat.gz
+	cp ./data/upVW-magn-2.5nm.dat ./tests
 	cp ./bin/SpinAccGPU ./tests
+
+testATW: clean useATWparameters SpinAccGPU enableATW
+
+testVW: clean useVWparameters SpinAccGPU enableVW
+
